@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Multi-Answer Reinforcement Learning for LMs">
+  <meta name="keywords" content="Escaping the Mode: Multi-Answer RL for LMs">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escaping the Mode: \n Multi-Answer Reinforcement Learning in Language Models</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+
+
+  
+
+
+
+  <style>
+    .scroll-box {
+      max-height: 9em; /* 4 lines * 1.5em line-height */
+      overflow-y: scroll;
+      background-color: #f9f9f9;
+      padding: 12px;
+      margin: 10px 0;
+      border-left: 4px solid #ccc;
+      font-family: inherit;
+      white-space: pre-wrap;
+      line-height: 1;
+      scrollbar-gutter: stable;
+      font-size: 0.85em; /* smaller font */
+
+    }
+
+    .tag-label {
+      font-weight: bold;
+      color: #333;
+    }
+  
+    /* Optional: customize scrollbar for WebKit browsers */
+    .scroll-box::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    .scroll-box::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+    }
+  
+    .scroll-box::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .math-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+  </style>
+  
+  
+  <style>
+    .gray-box {
+      background-color: #f5f5f5;
+      padding: 12px;
+      margin: 10px 0;
+      border-left: 4px solid #bbb;
+      font-family: inherit;
+      line-height: 1;
+      font-size: 0.85em; /* smaller font */
+
+    }
+  
+    .tag-label {
+      font-weight: bold;
+      color: #333;
+    }
+
+
+    .menu-list a {
+  font-size: 0.95em;
+  padding: 0.4em 0;
+}
+.menu-label {
+  font-size: 0.8em;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+  </style>
+  
+
+</head>
+
+
+
+
+<body>
+
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+
+    
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">Escaping the Mode: <br> Multi-Answer Reinforcement Learning in Language Models</h1>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div class="columns" style="align-items: center; margin-left: 0;">
+        <div class="column is-narrow" style="padding-right: 20px; margin-left: -10px;">
+          <img src="assets/images/multiAns_logo1.png" alt="Logo" style="height: 120px;">
+        </div>
+        <div class="column" style="padding-left: 0;">
+          <div class="is-size-6 publication-authors" style="margin-bottom: 1px;">
+            
+            <span class="author-block">
+              <a href="https://ishapuri.github.io/">Isha Puri</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+                <a href="https://damanimehul.github.io/">Mehul Damani</a><sup>1</sup>,</span>
+            </span>
+            <span class="author-block">
+              <a href="https://idanshen.github.io/">Idan Shenfeld</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://healthyml.org/marzyeh/">Marzyeh Ghassemi</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.mit.edu/~jda/">Jacob Andreas</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://people.csail.mit.edu/yoonkim/">Yoon Kim</a><sup>1</sup>
+            </span>
+          </div>
+      
+          <div class="is-size-6 publication-authors" style="margin-bottom: 1px;">
+            <span class="author-block"><sup>1</sup>MIT CSAIL</span>
+          </div>
+      
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2507.16806"
+                 class="external-link button is-normal" target="_blank" rel="noopener noreferrer">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://github.com/damanimehul/RLCR"
+                 class="external-link button is-normal" target="_blank" rel="noopener noreferrer">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://x.com/MehulDamani2/status/1948069173294481877"
+                 class="external-link button is-normal" target="_blank" rel="noopener noreferrer">
+                <span class="icon"><i class="fab fa-twitter"></i></span>
+                <span>Twitter</span>
+              </a>
+
+
+              <!-- Models/Data (Hugging Face) -->
+            <span class="link-block">
+              <a href="https://huggingface.co/collections/mehuldamani/rlcr-68912f9731b0bce30e4cc8c0"
+                class="external-link button is-normal" target="_blank" rel="noopener noreferrer">
+                <span class="icon">
+                  <img src="https://huggingface.co/front/assets/huggingface_logo.svg"
+                      alt="Hugging Face" style="height: 1em; vertical-align: middle;">
+                </span>
+                <span>Models/Data</span>
+            </a>
+          </span>
+        </div>
+ 
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+
+
+
+
+
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<br><br>
+
+
+<div class="columns is-vcentered">
+  <!-- Main Figure -->
+  <div class="column">
+    <div class="image-container" style="text-align: center;">
+      <!-- Use Figure 1 from the paper (page 1). Save as assets/images/main_fig1_multi.jpg -->
+      <img src="assets/images/main_fig_1.png" alt="Figure 1: Multi-Answer RL Overview" style="max-width: 90%; height: auto;">
+      <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+        <strong>Figure 1.</strong> Standard RL collapses to a single mode; Multi-Answer RL trains the model to output a distribution of plausible answers.
+      </p>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="column is-narrow" style="max-width: 210px; padding-left: 1rem; border-left: 1px solid #ccc;">
+    <div class="table-of-contents">
+      <h3><strong><u>Table of Contents</u></strong></h3>
+      <ul>
+        <li><a href="#intro">Intro</a></li>
+        <li><a href="#why-single-answer">Single-Answer RL Fails</a></li>
+        <li><a href="#our-idea">Our Idea</a></li>
+        <li><a href="#multi-rlvr">Multi-RLVR</a></li>
+        <li><a href="#multi-rlcr">Multi-RLCR</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#diversity">Diversity</a></li>
+        <li><a href="#efficiency">Efficiency</a></li>
+        <li><a href="#scaling-k">Scaling with K</a></li>
+        <li><a href="#calibration">Calibration</a></li>
+        <li><a href="#takeaway">Takeaway</a></li>
+        <li><a href="#BibTeX">BibTeX</a></li>
+        <li><a href="#Code">Code</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION: INTRO ===================== -->
+<section id="intro" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Intro</h2>
+
+      <div class="content">
+        <p>
+          Modern language models are typically post-trained via RL to produce a <strong>single best answer</strong> per query.
+          This matches benchmark evaluation—where exactly one answer is correct—but it is fundamentally mismatched to many real-world settings.
+        </p>
+
+        <p>
+          In practice, tasks are often <strong>multi-valid</strong> or <strong>epistemically uncertain</strong>:
+        </p>
+
+        <ul>
+          <li>🩺 Medical diagnosis: multiple plausible (and sometimes simultaneously correct) diagnoses</li>
+          <li>❓ Ambiguous QA: incomplete or underspecified information implies multiple reasonable hypotheses</li>
+          <li>📚 Decision support: downstream actions depend on exploring alternatives and knowing what you don’t know</li>
+        </ul>
+
+        <p>
+          Single-answer RL tends to <strong>collapse probability mass onto the dominant mode</strong>, suppressing alternative correct hypotheses.
+          If we want models to represent <em>distributions</em> of plausible answers—ideally paired with <em>calibrated uncertainty</em>—we should optimize those properties <strong>during training</strong>, not try to recover them at inference time.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: WHY SINGLE-ANSWER FAILS ===================== -->
+<section id="why-single-answer" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Why Single-Answer RL Fails</h2>
+
+      <div class="content">
+        <p>
+          Standard RLVR uses a <strong>single-answer correctness reward</strong>: the model is rewarded for matching one ground-truth output.
+          This incentivizes the policy to concentrate mass on a single high-reward response.
+        </p>
+
+        <p>
+          As a result, the common “fix” is <strong>inference-time scaling</strong>—sampling the model multiple times and hoping diversity emerges.
+          But when the underlying distribution collapses, repeated sampling is fundamentally limited:
+        </p>
+
+        <ul>
+          <li>Duplicate answers (low effective set size)</li>
+          <li>Repeated reasoning scaffolds and redundant computation</li>
+          <li>Poor scaling of Pass@K and recall</li>
+        </ul>
+
+        <p>
+          <strong>Key message:</strong> mode collapse is a <em>training objective problem</em>, not an inference trick problem.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: OUR IDEA ===================== -->
+<section id="our-idea" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Our Idea</h2>
+
+      <div class="content">
+        <p>
+          <strong>Multi-Answer Reinforcement Learning</strong> trains a model to generate a <strong>set of K distinct candidate answers</strong>
+          in a <strong>single forward pass</strong>.
+        </p>
+
+        <ul>
+          <li>💡 Internalizes aspects of inference-time search into the model’s generative process</li>
+          <li>💡 Encourages explicit exploration of alternative hypotheses</li>
+          <li>💡 Supports multi-valid tasks and ambiguous single-label tasks</li>
+          <li>💡 Can be extended to produce <strong>calibrated confidence</strong> per answer</li>
+        </ul>
+
+        <p>
+          Instead of repeatedly sampling the same collapsed distribution, the model learns to jointly optimize a structured output containing multiple hypotheses—more diverse, higher recall, and more token-efficient.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: MULTI-RLVR ===================== -->
+<section id="multi-rlvr" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Multi-Answer RLVR (Multi-RLVR)</h2>
+
+      <div class="content">
+        <p>
+          We generalize RLVR from a single ground-truth answer to a <strong>ground-truth answer set</strong>
+          \(Y^*(x)=\{y^*_1,\dots,y^*_N\}\), where \(N\) may vary per example.
+        </p>
+
+        <p>
+          The policy is prompted to produce a structured set of <strong>K distinct</strong> candidate answers
+          \(A=\{a_1,\dots,a_K\}\) in a single generation.
+        </p>
+
+        <p>
+          We then use a <strong>set-level verifiable reward</strong> that measures coverage:
+        </p>
+
+        <div class="math-scroll">
+          <p>$$
+            R^{multi}_{RLVR}(A, Y^*) = \sum_{i=1}^{K} \mathbb{1}[a_i \in Y^*]
+          $$</p>
+        </div>
+
+        <p style="margin-top: 1rem;">
+          This subsumes standard RLVR (K=1) and Pass@K (N=1, K&gt;1), and directly optimizes “how many correct hypotheses did we recover?” rather than “did we guess the single best one?”.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: MULTI-RLCR ===================== -->
+<section id="multi-rlcr" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Multi-Answer RLCR (Multi-RLCR)</h2>
+
+      <div class="content">
+        <p>
+          Multi-RLCR extends Multi-RLVR by training the model to output <strong>confidence scores per answer</strong>.
+          In one chain-of-thought, the model generates:
+        </p>
+
+        <ul>
+          <li>Answer set \(A=\{a_1,\dots,a_K\}\)</li>
+          <li>Confidence set \(Q=\{q_1,\dots,q_K\}\), where each \(q_i \in [0,1]\) estimates correctness of \(a_i\)</li>
+        </ul>
+
+        <p>
+          We use a set-level calibration objective based on a <strong>Multi-Brier score</strong>:
+        </p>
+
+        <div class="math-scroll">
+          <p>$$
+            R^{multi}_{Brier}(A,Q,Y^*) = \frac{1}{K}\sum_{i=1}^{K} (q_i - \mathbb{1}[a_i \in Y^*])^2
+          $$</p>
+        </div>
+
+        <p>
+          Final reward:
+        </p>
+
+        <div class="math-scroll">
+          <p>$$
+            R^{multi}_{RLCR}(A,Q,Y^*) = R^{multi}_{RLVR}(A,Y^*) - R^{multi}_{Brier}(A,Q,Y^*)
+          $$</p>
+        </div>
+
+        <p style="margin-top: 1rem;">
+          This trains models to produce <strong>uncertainty-aware answer sets</strong>—a distribution over plausible hypotheses with calibrated confidence.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: RESULTS ===================== -->
+<section id="results" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Results</h2>
+
+      <div class="content">
+        <p>
+          Across medical diagnosis (DDXPlus) and ambiguous QA (HotPotQA-Modified), Multi-Answer RL improves:
+        </p>
+
+        <ul>
+          <li>✅ <strong>Recall / Pass@K</strong> (more correct answers recovered per example)</li>
+          <li>✅ <strong>Diversity</strong> (distinct hypotheses instead of repeated samples)</li>
+          <li>✅ <strong>Token efficiency</strong> (fewer tokens to produce K answers)</li>
+        </ul>
+
+        <p>
+          Critically, <strong>prompting a single-answer-trained model</strong> to output multiple answers does <em>not</em> match multi-answer training.
+          The objective matters.
+        </p>
+
+        <!-- Include Table 1 from the paper (page 6). Save as assets/images/table1.jpg -->
+        <!-- Use Figure 2 from the paper (page 8): recall over k -->
+        <div style="text-align: center;">
+          <img src="assets/images/scaling_curve.png" alt="Figure 2: Average recall over k" style="max-width: 80%;">
+          <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+            <strong>Figure 2 (paper page 8).</strong> Multi-Answer RL improves recall scaling with k and recovers answers RLVR-Single never reaches.
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: DIVERSITY ===================== -->
+<section id="diversity" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Diversity</h2>
+
+      <div class="content">
+        <p>
+          Multi-Answer training <strong>escapes the dominant mode</strong>.
+          Under a matched sampling budget, Multi-RLVR produces substantially more unique answers than RLVR-Single—recovering correct hypotheses that single-answer RL never reaches.
+        </p>
+
+        
+
+        <div class="columns is-centered mt-5">
+          <div class="column has-text-centered">
+            <!-- Use Figure 4 from the paper (page 10): diversity histogram -->
+            <img src="assets/images/diversity_histogram.png" alt="Figure 4: Diversity of diagnoses per question" style="max-width: 100%;">
+            <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+              <strong>Figure 4 (paper page 10).</strong> RLVR-Multi produces more distinct diagnoses than RLVR-Single (higher effective set size).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: EFFICIENCY ===================== -->
+<section id="efficiency" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Efficiency</h2>
+
+      <div class="content">
+        <p>
+          Inference-time sampling is expensive because it repeatedly regenerates similar reasoning.
+          Even when the final answers differ, independently sampled outputs often share substantial token-level overlap.
+        </p>
+
+        <p>
+          Multi-Answer RL mitigates this by optimizing multiple hypotheses jointly in a single generation—reducing redundant computation and lowering total token cost for K answers.
+        </p>
+
+        <div class="columns is-centered mt-5">
+          <div class="column has-text-centered">
+            <!-- Use Figure 5 from the paper (page 10): overlap example -->
+            <img src="assets/images/token_overlap.png" alt="Figure 5: Token overlap across samples" style="max-width: 100%;">
+            <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+              <strong>Figure 5 (paper page 10).</strong> Independent sampling re-instantiates similar reasoning tokens; Multi-Answer RL reduces redundancy.
+            </p>
+          </div>
+        </div>
+
+        <p style="margin-top: 1rem;">
+          <strong>Takeaway:</strong> Multi-answer training is a principled, compute-efficient alternative to inference-time scaling.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: SCALING WITH K ===================== -->
+<section id="scaling-k" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Scaling with K</h2>
+
+      <div class="content">
+        <p>
+          We train Multi-RLVR with \(K \in \{2,3,4,5\}\).
+          Because medical examples often have multiple correct diagnoses, increasing K expands the model’s capacity to recover valid alternatives.
+        </p>
+
+        <p>
+          Training remains stable as K increases: the average number of correct answers per set increases monotonically, and uniqueness constraints ensure gains come from surfacing new hypotheses rather than repeating the dominant one.
+        </p>
+
+        <div class="columns is-centered mt-5">
+          <div class="column has-text-centered">
+            <!-- Use Figure 6 from the paper (page 11) -->
+            <img src="assets/images/varying_k_training_curves.png" alt="Figure 6: Stability with increasing K" style="max-width: 100%;">
+            <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+              <strong>Figure 6 (paper page 11).</strong> As K increases, Multi-Answer RLVR stably recovers more unique correct diagnoses per set.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: CALIBRATION ===================== -->
+<section id="calibration" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Calibration</h2>
+
+      <div class="content">
+        <p>
+          Multi-RLCR adds a set-level calibration objective so the model can output not just multiple answers, but <strong>meaningful confidence estimates</strong> for each hypothesis.
+        </p>
+
+        <p>
+          On DDXPlus, RLCR-Multi improves set- and answer-level calibration over RLVR-Multi, and calibration curves closely track the identity line.
+        </p>
+
+        <div class="columns is-centered mt-5">
+          <div class="column has-text-centered">
+            <!-- Use Figure 3 from the paper (page 9): calibration curves -->
+            <img src="assets/images/calibration_curve.png" alt="Figure 3: Calibration curves" style="max-width: 70%;">
+            <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
+              <strong>Figure 3 (paper page 9).</strong> RLCR-Multi tracks perfect calibration; RLVR-Multi is systematically overconfident.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SECTION: TAKEAWAY ===================== -->
+<section id="takeaway" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Takeaway</h2>
+
+      <div class="content">
+        <p>
+          If you want models to output <strong>multiple plausible hypotheses</strong> and <strong>calibrated uncertainty</strong>,
+          those properties should be optimized during training.
+        </p>
+
+        <ul>
+          <li>✅ Escapes mode collapse by explicitly training on answer sets</li>
+          <li>✅ Improves recall/Pass@K and answer diversity</li>
+          <li>✅ Enables calibrated confidence over hypotheses (Multi-RLCR)</li>
+          <li>✅ Reduces redundant inference-time computation (token-efficient)</li>
+        </ul>
+
+        <p>
+          <strong>Multi-Answer RL</strong> is a principled, compute-efficient alternative to inference-time scaling for tasks where uncertainty and multi-validity matter.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BIBTEX ===================== -->
+<section id="BibTeX" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">BibTeX</h2>
+
+      <div class="content">
+        <div class="scroll-box">
+@article{puri202Xescaping,
+  title={Escaping the Mode: Multi-Answer Reinforcement Learning in LMs},
+  author={Puri, Isha and Damani, Mehul and Shenfeld, Idan and Ghassemi, Marzyeh and Andreas, Jacob and Kim, Yoon},
+  journal={arXiv preprint arXiv:XXXX.XXXXX},
+  year={202X}
+}
+        </div>
+        <p class="is-size-7" style="color:#666;">ISHA REPLACE THIS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CODE ===================== -->
+<section id="Code" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">Code</h2>
+
+      <div class="content">
+        <p>
+          Code and trained checkpoints:
+        </p>
+        <ul>
+          <li><a href="CODE_URL" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+          <li><a href="MODELS_URL" target="_blank" rel="noopener noreferrer">Models / Data (Hugging Face)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+</body>
+</html>
