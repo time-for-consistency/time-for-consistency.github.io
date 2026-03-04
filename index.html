@@ -235,25 +235,23 @@
 <br><br>
 
 
-<div class="columns is-vcentered">
-  <!-- Main Figure -->
-  <div class="column">
-    <div class="image-container" style="text-align: center;">
-      <!-- Use Figure 1 from the paper (page 1). Save as assets/images/main_fig1_multi.jpg -->
-      <img src="assets/images/consistency_fig_1.001.png" alt="Consistency Figure 1" style="max-width: 90%; height: auto;">
-      <p class="is-size-7" style="margin-top: 0.4rem; color: #666;">
-      </p>
-    </div>
-  </div>
+<!-- Main Figure -->
+<div class="image-container" style="text-align: center; height: 100%; margin-bottom: 2rem;">
+  <img 
+    src="assets/images/consistency_fig_1.001.png" 
+    alt="Consistency Figure 1" 
+    style="max-width: 100%; max-height: 350px; width: 100%; height: auto; object-fit: contain; display: block; margin: 0 auto;"
+  >
+  <p class="is-size-7" style="margin-top: 0.4rem; color: #666;"></p>
+</div>
 
-  <!-- TOC -->
-  <div class="column is-narrow" style="max-width: 210px; padding-left: 1rem; border-left: 1px solid #ccc;">
-    <div class="box" style="background: #f5f7f9; border-left: 5px solid #3387d6; margin-bottom: 1.5rem;">
-      <h3 class="has-text-weight-bold" style="margin-bottom: 0.5rem;">Abstract</h3>
-      <p style="color: #444;">
-        Despite ever-increasing sophistication in language model (LM) training pipelines, important failures persist: models over-personalize their behavior to individual users, exhibit incomplete logical generalization, and produce confident but incorrect responses. We argue that these failures arise from a shared modeling assumption: that behavior can be specified and evaluated independently on single-output pairs. Many model failures are difficult or impossible to detect without reasoning about relationships between responses across inputs. In this position paper, we propose selfconsistency as a framework for understanding these failures. We observe that a wide variety of techniques designed to improve specific aspects of LM behavior—targeting properties as diverse as adversarial robustness and factual coherence— can be understood as special cases of a common “consistency optimization” procedure and addressed with a standard set of optimization tools. The same framework can be used to specify emerging model capabilities, such as introspection and self-improvement, by constraining a model’s behavior to be consistent with its own descriptions of that behavior. We discuss what it would mean to develop generally consistent LMs, including the capabilities they would enable and the objections they raise.
-      </p>
-    </div>
+<!-- Abstract -->
+<div style="width: 100%;">
+  <div class="box" style="background: #f5f7f9; border-left: 5px solid #3387d6; margin-bottom: 1.5rem;">
+    <h3 class="has-text-weight-bold" style="margin-bottom: 0.5rem;">Abstract</h3>
+    <p style="color: #444;">
+      Despite ever-increasing sophistication in language model (LM) training pipelines, important failures persist: models over-personalize their behavior to individual users, exhibit incomplete logical generalization, and produce confident but incorrect responses. We argue that these failures arise from a shared modeling assumption: that behavior can be specified and evaluated independently on single-output pairs. Many model failures are difficult or impossible to detect without reasoning about relationships between responses across inputs. In this position paper, we propose selfconsistency as a framework for understanding these failures. We observe that a wide variety of techniques designed to improve specific aspects of LM behavior—targeting properties as diverse as adversarial robustness and factual coherence— can be understood as special cases of a common “consistency optimization” procedure and addressed with a standard set of optimization tools. The same framework can be used to specify emerging model capabilities, such as introspection and self-improvement, by constraining a model’s behavior to be consistent with its own descriptions of that behavior. We discuss what it would mean to develop generally consistent LMs, including the capabilities they would enable and the objections they raise.
+    </p>
   </div>
 </div>
 
@@ -280,6 +278,30 @@
 </div>
 
 
+
+
+<!-- ===================== BIBTEX ===================== -->
+<section id="BibTeX" class="section" style="font-family: 'DM Sans', sans-serif;">
+  <div class="container">
+    <div class="box" style="border: 1px solid #ccc; padding: 1.5rem; position: relative;">
+      <a href="#top" style="position: absolute; top: 10px; right: 10px; font-size: 0.8rem;">Back to Top</a>
+      <h2 class="title is-3 has-text-centered">BibTeX</h2>
+
+      <div class="content">
+        <div class="scroll-box">
+          @misc{pres2026consistency,
+            title={It's Time to Optimize for Consistency},
+            author={Pres, Itamar and Li, Belinda Z. and Ruis, Laura and Guo, Zifan Carl and Hu, Keya and Damani, Mehul and Puri, Isha and Lubana, Ekdeep Singh and Andreas, Jacob},
+            year={2026},
+            note={Manuscript in preparation},
+            institution={MIT CSAIL and Goodfire AI}
+          }
+        </div>
+        <p class="is-size-7" style="color:#666;">ISHA REPLACE THIS.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 
