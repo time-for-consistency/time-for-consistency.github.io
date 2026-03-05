@@ -158,7 +158,7 @@
             <span class="author-block">
               <a href="https://lauraruis.github.io/">Laura Ruis*</a><sup>1</sup>,</span>
             </span>
-
+            <br>
             <span class="author-block">
               <a href="https://www.carlguo.com/">Zifan Carl Guo</a><sup>1</sup>,</span>
             </span>
@@ -174,7 +174,7 @@
             <span class="author-block">
               <a href="https://ishapuri.github.io/">Isha Puri</a><sup>1</sup>,
             </span>
-            
+            <br>
             <span class="author-block">
               <a href="https://ekdeepslubana.github.io/">Ekdeep Singh Lubana</a><sup>2</sup>,
             </span>
@@ -191,7 +191,7 @@
             <span class="author-block"><sup>2</sup>Goodfire AI</span>
           </div>
       
-          <div class="publication-links">
+          <!--<div class="publication-links">
             <span class="link-block">
               <a href="https://x.com/ishapuri101/status/1953200487857283475"
                  class="external-link button is-normal" target="_blank" rel="noopener noreferrer">
@@ -210,69 +210,60 @@
             </span>
 
             
+          </div>-->
+
+          <div class="box" style="background: #eef3fa; border: 1px solid #bcd4ec; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; text-align: center;">
+            <a href="assets/pdfs/Consistency_Pos_Paper.pdf" style="text-decoration: none; color: #2254a8; font-weight: 600; font-size: 1.15rem;">
+              📖 Read the Paper
+            </a>
           </div>
         </div>
       </div>
-      
-      
-      
-
-
-
-
-
-
-    </div>
+   </div>
   </div>
 </section>
 
+<!-- Abstract -->
+<div class="columns">
+  <div class="column is-full">
+    <div class="box" style="background: #f5f7f9; border-left: 5px solid #3387d6; margin-bottom: 1.5rem;">
+      <h3 class="has-text-weight-bold" style="margin-bottom: 0.5rem;">TL;DR</h3>
+      <p style="color: #444;">
+        <!--Despite ever-increasing sophistication in language model (LM) training pipelines, important failures persist: models over-personalize their behavior to individual users, exhibit incomplete logical generalization, and produce confident but incorrect responses. We argue that these failures arise from a shared modeling assumption: that behavior can be specified and evaluated independently on single-output pairs. Many model failures are difficult or impossible to detect without reasoning about relationships between responses across inputs. In this position paper, we propose <strong><em>self-consistency </em></strong> as a framework for understanding these failures. We observe that a wide variety of techniques designed to improve specific aspects of LM behavior—targeting properties as diverse as adversarial robustness and factual coherence— can be understood as special cases of a common "consistency optimization" procedure and addressed with a standard set of optimization tools. The same framework can be used to specify emerging model capabilities, such as introspection and self-improvement, by constraining a model's behavior to be consistent with its own descriptions of that behavior. We discuss what it would mean to develop generally consistent LMs, including the capabilities they would enable and the objections they raise.-->
+        Why do AI models agree with users even when they're wrong, give different answers to the same question phrased differently, or confidently state falsehoods? We argue these failures share a common root: models are trained to get each individual response right, with no mechanism to ensure their responses are consistent with each other. We propose self-consistency — a framework that evaluates and trains models based on relationships across multiple responses — as a unified solution. This reframes problems like sycophancy, factual inconsistency, and reasoning failures as special cases of the same underlying issue, and opens the door to new capabilities like models that can reliably explain their own behavior and fix their own errors.
+      </p>
+    </div>
+  </div>
+</div>
 
-<div class="columns is-vcentered">
-  <!-- Main Figure -->
-  <div class="column is-6">
-    <div class="image-container" style="text-align: center; height: 100%;">
+<!-- Main Figure -->
+<div class="columns">
+  <div class="column is-full">
+    <div class="image-container" style="text-align: center;">
       <img 
         src="assets/images/teaser_fig.png" 
         alt="Consistency Figure 1" 
-        style="max-width: 100%; max-height: 350px; width: 100%; height: auto; object-fit: contain; display: block; margin: 0 auto;"
+        style="max-width: 100%; max-height: 400px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;"
       >
-      <p class="is-size-7" style="margin-top: 0.4rem; color: #666;"></p>
+      <p class="is-size-7" style="margin-top: 0.4rem; color: #666;"><strong>(A)</strong> Standard SFT/RL trains responses independently, which can induce inconsistent outputs. <br/> <strong>(B)</strong> Cross-input optimization directly enforces consistency through a relational objective Φ.</p>
     </div>
   </div>
+</div>
 
-  <!-- BibTeX -->
-  <div class="column is-6" style="padding-left: 2rem;">
-    <div class="box" style="background: #f9fafb; border: 1px solid #ccc; border-radius: 8px; padding: 1.5rem;">
-      <h3 class="title is-5" style="text-align: center; margin-bottom: 1rem;"></h3>
-      <pre style="background-color: #bbb9b98b; padding: 15px; border-radius: 5px; border: 1px solid #ccc; margin: 0;"><code>@misc{pres2026consistency,
+<!-- Citation -->
+<div class="columns">
+  <div class="column is-full">
+    <h3 class="title is-4" style="margin-bottom: 1rem;">How to Cite</h3>
+    <pre style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; border: 1px solid #ccc; margin: 0;"><code>@misc{pres2026consistency,
       title={It's Time to Optimize for Self-Consistency},
       author={Pres, Itamar and Li, Belinda Z. and Ruis, Laura and Guo, Zifan Carl and Hu, Keya and Damani, Mehul and Puri, Isha and Lubana, Ekdeep Singh and Andreas, Jacob},
       year={2026},
       note={Manuscript in submission},
       institution={MIT CSAIL}
     }}</code></pre>
-    </div>
-    <div class="box" style="background: #eef3fa; border: 1px solid #bcd4ec; border-radius: 8px; padding: 1.2rem; margin-top: 1rem; text-align: center;">
-      <a href="https://time-for-consistency.github.io/#paper" style="text-decoration: none; color: #2254a8; font-weight: 600; font-size: 1.15rem;">
-        📖 Read the Paper
-      </a>
-    </div>
   </div>
 </div>
 
-
-<!-- Abstract -->
-<div class="columns" style="margin-top: 2rem;">
-  <div class="column is-full">
-    <div class="box" style="background: #f5f7f9; border-left: 5px solid #3387d6; margin-bottom: 1.5rem;">
-      <h3 class="has-text-weight-bold" style="margin-bottom: 0.5rem;">Abstract</h3>
-      <p style="color: #444;">
-        Despite ever-increasing sophistication in language model (LM) training pipelines, important failures persist: models over-personalize their behavior to individual users, exhibit incomplete logical generalization, and produce confident but incorrect responses. We argue that these failures arise from a shared modeling assumption: that behavior can be specified and evaluated independently on single-output pairs. Many model failures are difficult or impossible to detect without reasoning about relationships between responses across inputs. In this position paper, we propose <strong><em>self-consistency </em></strong> as a framework for understanding these failures. We observe that a wide variety of techniques designed to improve specific aspects of LM behavior—targeting properties as diverse as adversarial robustness and factual coherence— can be understood as special cases of a common "consistency optimization" procedure and addressed with a standard set of optimization tools. The same framework can be used to specify emerging model capabilities, such as introspection and self-improvement, by constraining a model's behavior to be consistent with its own descriptions of that behavior. We discuss what it would mean to develop generally consistent LMs, including the capabilities they would enable and the objections they raise.
-
-      </p>
-    </div>
-  </div>
-</div>
 
 
 
